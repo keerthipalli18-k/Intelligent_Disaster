@@ -1,0 +1,452 @@
+/* =========================
+   GLOBAL STYLES
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #080f1f;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+:root {
+    --primary: #00bfff;
+    --secondary: #00e6a8;
+    --background: #080f1f;
+    --card: #111d32;
+    --text: #cbd5e1;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+header {
+    width: 100%;
+    padding: 20px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0c172a;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #1e3554;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.logo span {
+    color: var(--secondary);
+}
+
+nav {
+    display: flex;
+    gap: 30px;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: var(--secondary);
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero {
+    min-height: 620px;
+    padding: 90px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+    background:
+        radial-gradient(circle at 80% 40%,
+        #123b5a 0%, #080f1f 55%);
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.tagline {
+    color: var(--secondary);
+    font-size: 13px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: 55px;
+    line-height: 1.2;
+    margin-bottom: 25px;
+}
+
+.hero h1 span {
+    display: block;
+    color: var(--primary);
+}
+
+.hero-content > p:not(.tagline) {
+    color: var(--text);
+    font-size: 17px;
+    margin-bottom: 35px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 14px 28px;
+    background: linear-gradient(
+        90deg,
+        #008cff,
+        #00d9a5
+    );
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px #00bfff55;
+}
+
+
+/* =========================
+   HERO CARD
+========================= */
+
+.hero-image {
+    width: 350px;
+}
+
+.emergency-card {
+    padding: 35px;
+    background: #13243c;
+    border: 1px solid #245072;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px #00000055;
+}
+
+.emergency-card h3 {
+    color: var(--secondary);
+    font-size: 16px;
+}
+
+.emergency-card h1 {
+    font-size: 70px;
+    color: var(--primary);
+    margin: 10px 0;
+}
+
+.emergency-card p {
+    color: var(--text);
+    margin: 8px 0;
+}
+
+.emergency-card hr {
+    border: 1px solid #29415e;
+    margin: 20px 0;
+}
+
+
+/* =========================
+   ABOUT SECTION
+========================= */
+
+.about {
+    padding: 90px 12%;
+    text-align: center;
+    background: #0c172a;
+}
+
+.about h2 {
+    font-size: 35px;
+    color: var(--primary);
+    margin-bottom: 25px;
+}
+
+.about p {
+    max-width: 900px;
+    margin: 15px auto;
+    color: var(--text);
+    font-size: 17px;
+}
+
+
+/* =========================
+   ALGORITHM SECTION
+========================= */
+
+.algorithms {
+    padding: 90px 8%;
+}
+
+.algorithms > h2 {
+    text-align: center;
+    font-size: 36px;
+    color: var(--secondary);
+    margin-bottom: 10px;
+}
+
+.section-description {
+    text-align: center;
+    color: var(--text);
+    margin-bottom: 55px;
+}
+
+
+/* =========================
+   ALGORITHM CARDS
+========================= */
+
+.algorithm-card {
+    max-width: 900px;
+    margin: 35px auto;
+    padding: 35px;
+    background: var(--card);
+    border: 1px solid #253c5c;
+    border-radius: 16px;
+    transition: 0.3s;
+}
+
+.algorithm-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px #00bfff15;
+}
+
+.algorithm-card h3 {
+    color: var(--primary);
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.algorithm-card h4 {
+    color: var(--secondary);
+    font-size: 19px;
+    margin-bottom: 12px;
+}
+
+.algorithm-card p {
+    color: var(--text);
+    margin-bottom: 18px;
+}
+
+
+/* =========================
+   INPUT FIELDS
+========================= */
+
+.algorithm-card label {
+    display: block;
+    color: #ffffff;
+    margin: 18px 0 8px;
+    font-weight: 600;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #34516e;
+    border-radius: 8px;
+    background: #081426;
+    color: white;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+
+textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 10px #00bfff33;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #71849e;
+}
+
+.hint {
+    font-size: 13px;
+    color: var(--secondary) !important;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.algorithm-card button {
+    margin-top: 22px;
+    padding: 13px 25px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(
+        90deg,
+        #008cff,
+        #00d9a5
+    );
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.algorithm-card button:hover {
+    transform: scale(1.04);
+    box-shadow: 0 5px 20px #00bfff44;
+}
+
+
+/* =========================
+   OUTPUT BOX
+========================= */
+
+.output {
+    margin-top: 25px;
+    padding: 20px;
+    min-height: 65px;
+    background: #071426;
+    border: 1px solid #28445e;
+    border-left: 4px solid var(--secondary);
+    border-radius: 8px;
+    color: #ffffff;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.output.error {
+    border-left-color: #ff5555;
+    color: #ff9999;
+}
+
+.output.success {
+    border-left-color: var(--secondary);
+    color: #a8ffe2;
+}
+
+
+/* =========================
+   PROJECT INFORMATION
+========================= */
+
+.project-info {
+    padding: 65px 10%;
+    text-align: center;
+    background: #10213a;
+}
+
+.project-info h2 {
+    color: var(--secondary);
+    font-size: 32px;
+    margin-bottom: 15px;
+}
+
+.project-info p {
+    color: var(--text);
+    margin: 10px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    padding: 25px;
+    text-align: center;
+    background: #050b15;
+    border-top: 1px solid #20334c;
+}
+
+footer p {
+    color: #8294ac;
+    font-size: 14px;
+    margin: 5px;
+}
+
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 850px) {
+
+    .hero {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 40px;
+    }
+
+    .hero-image {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .algorithm-card {
+        padding: 20px;
+    }
+
+    .algorithms {
+        padding: 55px 5%;
+    }
+
+    .hero h1 {
+        font-size: 34px;
+    }
+
+    nav a {
+        font-size: 13px;
+    }
+
+}

@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Emergency Map | LifeLine</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h2 {
+            color: #222;
+        }
+
+        #map {
+            height: 550px;
+            width: 100%;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .live-status {
+            color: green;
+            font-weight: bold;
+        }
+
+        .directions-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 8px;
+        }
+
+        .directions-btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h2>LifeLine Emergency Locations</h2>
+
+    <p>View reported emergencies on the map.</p>
+
+    <p class="live-status">
+        ● LIVE EMERGENCY TRACKING
+    </p>
+
+    <!-- Map Container -->
+    <div id="map"></div>
+
+    <!-- Status Message -->
+    <p id="message">
+        Loading emergency locations...
+    </p>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+
+        // Initialize Map
+        const map = L.map("map").setView([20, 0], 2);
+
+        // Load OpenStreetMap Tiles
+        L.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+                attribution: "&copy; OpenStreetMap contributors",
+                maxZoom: 19
+            }
+        ).addTo(map);
+
+
+        // Create Marker Layer
+        const markerLayer = L.layerGroup().addTo(map);
+
+        let isLoading = false;
+
+        let hasFittedMap = false;
+
+
+        // Load Emergency Records
+        async function loadEmergencies() {
+
+            if (isLoading) return;
+
+            isLoading = true;
+
+            const message = document.getElementById("message");
+
+            try {
+
+                // Connect to Flask API
+                const response = await fetch(
+                    "http://127.0.0.1:5000/api/sos"
+                );
+
+                if (!response.ok) {
+                    throw new Error("API request failed");
+                }
+
+                // Get API Data
+                const data = await response.json();
+
+                // Extract Emergency Records
+                const emergencies = Array.isArray(data)
+                    ? data
+                    : Array.isArray(data.emergencies)
+                        ? data.emergencies
+                        : [];
+
+                // Filter Valid GPS Coordinates
+                const validRecords = emergencies.filter(item => {
+
+                    if (
+                        item.latitude === null ||
+                        item.longitude === null ||
+                        item.latitude === undefined ||
+                        item.longitude === undefined
+                    ) {
+                        return false;
+                    }
+
+                    const lat = Number(item.latitude);
+                    const lng = Number(item.longitude);
+
+                    return (
+                        Number.isFinite(lat) &&
+                        Number.isFinite(lng) &&
+                        lat >= -90 &&
+                        lat <= 90 &&
+                        lng >= -180 &&
+                        lng <= 180
+                    );
+
+                });
+
+
+                // Remove Previous Markers
+                markerLayer.clearLayers();
+
+                let markerCount = 0;
+
+
+                // Display Emergency Markers
+                validRecords.forEach(item => {
+
+                    const lat = Number(item.latitude);
+
+                    const lng = Number(item.longitude);
+
+
+                    // Create Marker
+                    const marker = L.marker([lat, lng]);
+
+
+                    // Create Popup
+                    const popup = document.createElement("div");
+
+
+                    // Emergency Type
+                    const emergency = document.createElement("p");
+
+                    emergency.textContent =
+                        "Emergency: " +
+                        (item.emergency_type || "Unknown");
+
+
+                    // Emergency Status
+                    const status = document.createElement("p");
+
+                    status.textContent =
+                        "Status: " +
+                        (item.status || "Pending");
+
+
+                    // Emergency Location
+                    const location = document.createElement("p");
+
+                    location.textContent =
+                        "Location: " +
+                        (item.location || "Unknown");
+
+
+                    // Add Details to Popup
+                    popup.appendChild(emergency);
+
+                    popup.appendChild(status);
+
+                    popup.appendChild(location);
+
+
+                    // Create Get Directions Button
+                    const directions = document.createElement("a");
+
+                    directions.textContent = "Get Directions";
+
+                    directions.href =
+                        "https://www.google.com/maps/dir/?api=1&destination=" +
+                        lat + "," + lng;
+
+                    directions.target = "_blank";
+
+                    directions.rel = "noopener noreferrer";
+
+                    directions.className = "directions-btn";
+
+
+                    // Add Button to Popup
+                    popup.appendChild(directions);
+
+
+                    // Bind Popup to Marker
+                    marker.bindPopup(popup);
+
+
+                    // Add Marker to Map
+                    markerLayer.addLayer(marker);
+
+                    markerCount++;
+
+                });
+
+
+                // Update Map
+                if (markerCount > 0) {
+
+                    // Zoom to Emergency Location Only Once
+                    if (!hasFittedMap) {
+
+                        if (markerCount === 1) {
+
+                            // Single Emergency: Zoom to Street Level
+                            const marker = markerLayer.getLayers()[0];
+
+                            map.setView(
+                                marker.getLatLng(),
+                                15
+                            );
+
+                        } else {
+
+                            // Multiple Emergencies: Show All Markers
+                            map.fitBounds(
+                                markerLayer.getBounds().pad(0.2),
+                                {
+                                    maxZoom: 15
+                                }
+                            );
+
+                        }
+
+                        hasFittedMap = true;
+
+                    }
+
+
+                    // Display Status
+                    message.textContent =
+                        markerCount +
+                        " emergency location(s) displayed. " +
+                        "Last updated: " +
+                        new Date().toLocaleTimeString();
+
+                } else {
+
+                    message.textContent =
+                        "No GPS emergency locations found.";
+
+                }
+
+            }
+
+            catch (error) {
+
+                message.textContent =
+                    "Unable to update emergencies. Check Flask.";
+
+                console.error(
+                    "Emergency Map Error:",
+                    error
+                );
+
+            }
+
+            finally {
+
+                isLoading = false;
+
+            }
+
+        }
+
+
+        // Load Emergency Data Initially
+        loadEmergencies();
+
+
+        // Automatically Update Every 5 Seconds
+        setInterval(
+            loadEmergencies,
+            5000
+        );
+
+
+    </script>
+
+</body>
+
+</html>
